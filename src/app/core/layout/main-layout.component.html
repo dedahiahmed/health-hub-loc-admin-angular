@@ -1,0 +1,128 @@
+<!-- src/app/core/layout/main-layout.component.html -->
+<nav class="shadow-sm w-full fixed top-0 left-0 z-50 bg-[#73b4a6] px-[2rem]">
+  <div class="flex justify-between items-center px-4 py-2">
+    <div></div>
+    <div class="flex items-center">
+      <span class="text-sm font-semibold mr-2">Admin</span>
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 80 80"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M0 40C0 29.3913 4.21427 19.2172 11.7157 11.7157C19.2172 4.21427 29.3913 0 40 0C50.6087 0 60.7828 4.21427 68.2843 11.7157C75.7857 19.2172 80 29.3913 80 40C80 50.6087 75.7857 60.7828 68.2843 68.2843C60.7828 75.7857 50.6087 80 40 80C29.3913 80 19.2172 75.7857 11.7157 68.2843C4.21427 60.7828 0 50.6087 0 40Z"
+          fill="black"
+          fill-opacity="0.65"
+        />
+      </svg>
+    </div>
+  </div>
+</nav>
+
+<button
+  (click)="toggleSidebar()"
+  class="top-0 left-0 absolute inline-flex items-center p-2 mt-[2rem] ms-3 text-sm text-white rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-white dark:focus:ring-gray-600"
+>
+  <span class="sr-only">Open sidebar</span>
+  <svg
+    class="w-6 h-6"
+    aria-hidden="true"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clip-rule="evenodd"
+      fill-rule="evenodd"
+      d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+    ></path>
+  </svg>
+</button>
+
+<aside
+  [class.translate-x-0]="isSidebarOpen"
+  [class.-translate-x-full]="!isSidebarOpen"
+  class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform sm:translate-x-0 bg-gray-50 dark:bg-[#73b4a6] shadow-lg"
+>
+  <div class="h-full px-3 py-4 overflow-y-auto">
+    <div class="w-full mb-[6rem] mt-[4rem] flex justify-center items-center">
+      <img
+        src="assets/Logos/loc.svg"
+        class="lg:w-[50%] w-[50%] object-cover bg-transparent"
+        alt="logo"
+      />
+    </div>
+    <ul class="space-y-[2rem] font-medium">
+      <li>
+        <a
+          routerLink="/pharmacy"
+          routerLinkActive="bg-[#47C3A4]"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-[#47C3A4] group"
+        >
+          <img
+            src="assets/icons/pharmacie.svg"
+            class="w-[25px] h-[25px]"
+            alt="pharmacie"
+          />
+          <span class="ml-3">Pharmacies</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/cabinet"
+          routerLinkActive="bg-[#47C3A4]"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-[#47C3A4] group"
+        >
+          <img
+            src="assets/icons/clinic.svg"
+            class="w-[25px] h-[25px]"
+            alt="cabinet"
+          />
+          <span class="flex-1 ml-3 whitespace-nowrap">Cabinet</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/doctor"
+          routerLinkActive="bg-[#47C3A4]"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-[#47C3A4] group"
+        >
+          <img
+            src="assets/icons/doctor.svg"
+            class="w-[25px] h-[25px]"
+            alt="doctor"
+          />
+          <span class="flex-1 ml-3 whitespace-nowrap">Doctors</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/pharmacy/garde"
+          routerLinkActive="bg-[#47C3A4]"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-[#47C3A4] group"
+        >
+          <svg
+            class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 18"
+          >
+            <path
+              d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"
+            />
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Garde</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+<div class="p-4 sm:ml-64 mt-16">
+  <router-outlet></router-outlet>
+</div>
