@@ -1,0 +1,17 @@
+export const wilayaOptions = [
+  { label: 'Hodh Chargui', value: 'HODH_CHARGUI' },
+  { label: 'Hodh El Gharbi', value: 'HODH_EL_GHARBI' },
+  { label: 'Assaba', value: 'ASSABA' },
+  { label: 'Gorgol', value: 'GORGOL' },
+  { label: 'Brakna', value: 'BRAKNA' },
+  { label: 'Trarza', value: 'TRARZA' },
+  { label: 'Adrar', value: 'ADRAR' },
+  { label: 'Dakhlet Nouadhibou', value: 'DAKHLET_NOUADHIBOU' },
+  { label: 'Tagant', value: 'TAGANT' },
+  { label: 'Guidimagha', value: 'GUIDIMAGHA' },
+  { label: 'Tiris Zemmour', value: 'TIRIS_ZEMMOUR' },
+  { label: 'Inchiri', value: 'INCHIRI' },
+  { label: 'Nouakchott Ouest', value: 'NOUAKCHOTT_OUEST' },
+  { label: 'Nouakchott Nord', value: 'NOUAKCHOTT_NORD' },
+  { label: 'Nouakchott Sud', value: 'NOUAKCHOTT_SUD' },
+];

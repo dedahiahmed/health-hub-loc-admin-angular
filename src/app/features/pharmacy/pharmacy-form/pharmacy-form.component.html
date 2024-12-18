@@ -1,0 +1,185 @@
+<div
+  class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12"
+>
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+      class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10"
+    >
+      <div class="max-w-md mx-auto">
+        <!-- Header with Icon -->
+        <div class="flex items-center space-x-5">
+          <div
+            class="h-14 w-14 bg-[#73b4a6] rounded-full flex flex-shrink-0 justify-center items-center text-black text-2xl font-mono"
+          >
+            P
+          </div>
+          <div
+            class="block pl-2 font-semibold text-xl self-start text-gray-700"
+          >
+            <h2 class="leading-relaxed">
+              {{ isEditMode ? "Edit" : "Create" }} Pharmacy
+            </h2>
+          </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div
+          *ngIf="isLoading"
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50"
+        >
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#73b4a6]"
+          ></div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="mt-4 p-4 bg-red-50 text-red-500 rounded-md">
+          {{ error }}
+        </div>
+
+        <!-- Form -->
+        <form
+          [formGroup]="pharmacyForm"
+          (ngSubmit)="onSubmit()"
+          class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7"
+        >
+          <!-- Name -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Name</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              placeholder="Pharmacy name"
+              [class.border-red-500]="getFieldError('name')"
+            />
+            <span
+              *ngIf="getFieldError('name')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("name") }}
+            </span>
+          </div>
+
+          <!-- Wilaya -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Willaya</label>
+            <select
+              formControlName="willaya"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              [class.border-red-500]="getFieldError('willaya')"
+            >
+              <option value="" disabled>Select Willaya</option>
+              <option
+                *ngFor="let option of wilayaOptions"
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <span
+              *ngIf="getFieldError('willaya')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("willaya") }}
+            </span>
+          </div>
+
+          <!-- Moughataa -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Moughataa</label>
+            <select
+              formControlName="moughataa"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              [class.border-red-500]="getFieldError('moughataa')"
+            >
+              <option value="" disabled>Select Moughataa</option>
+              <option
+                *ngFor="let option of moughataaOptions"
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <span
+              *ngIf="getFieldError('moughataa')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("moughataa") }}
+            </span>
+          </div>
+
+          <!-- Coordinates -->
+          <div class="flex items-center space-x-4">
+            <!-- Latitude -->
+            <div class="flex flex-col flex-1">
+              <label class="leading-loose">Latitude</label>
+              <input
+                type="number"
+                formControlName="latitude"
+                class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                placeholder="Latitude"
+                [class.border-red-500]="getFieldError('latitude')"
+              />
+              <span
+                *ngIf="getFieldError('latitude')"
+                class="text-sm text-red-500 mt-1"
+              >
+                {{ getFieldError("latitude") }}
+              </span>
+            </div>
+
+            <!-- Longitude -->
+            <div class="flex flex-col flex-1">
+              <label class="leading-loose">Longitude</label>
+              <input
+                type="number"
+                formControlName="longitude"
+                class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                placeholder="Longitude"
+                [class.border-red-500]="getFieldError('longitude')"
+              />
+              <span
+                *ngIf="getFieldError('longitude')"
+                class="text-sm text-red-500 mt-1"
+              >
+                {{ getFieldError("longitude") }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Is Open Tonight -->
+          <div class="flex flex-col">
+            <label class="leading-loose">isOpenTonight</label>
+            <select
+              formControlName="isOpenTonight"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+            >
+              <option value="">Oui/Non</option>
+              <option [ngValue]="true">Oui</option>
+              <option [ngValue]="false">Non</option>
+            </select>
+          </div>
+
+          <!-- Submit and Cancel Buttons -->
+          <div class="pt-4 flex items-center space-x-4">
+            <button
+              type="button"
+              (click)="router.navigate(['/pharmacy'])"
+              class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none border border-gray-400 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isLoading"
+              class="bg-[#73b4a6] hover:bg-[#5a9085] flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ isEditMode ? "Update" : "Create" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

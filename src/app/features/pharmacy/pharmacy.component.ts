@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { extractLabel } from '../../core/helpers/extractLabel';
+import { wilayaOptions } from '../../core/arrays/wilayaOptions';
+import { moughataaOptions } from '../../core/arrays/moughataaOptions';
 
 interface Pharmacy {
   id: number;
@@ -53,9 +56,11 @@ export class PharmacyComponent implements OnInit {
   error: string | null = null;
   currentPage = 0;
   totalPages = 1;
-  itemsPerPage = 10;
+  itemsPerPage = 8;
   totalElements = 0;
-
+  protected readonly extractLabel = extractLabel;
+  protected readonly wilayaOptions = wilayaOptions;
+  protected readonly moughataaOptions = moughataaOptions;
   constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit() {

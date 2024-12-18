@@ -1,4 +1,3 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layout/main-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -16,10 +15,29 @@ export const routes: Routes = [
     children: [
       {
         path: 'pharmacy',
-        loadComponent: () =>
-          import('./features/pharmacy/pharmacy.component').then(
-            (m) => m.PharmacyComponent
-          ),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/pharmacy/pharmacy.component').then(
+                (m) => m.PharmacyComponent
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import(
+                './features/pharmacy/pharmacy-form/pharmacy-form.component'
+              ).then((m) => m.PharmacyFormComponent),
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import(
+                './features/pharmacy/pharmacy-form/pharmacy-form.component'
+              ).then((m) => m.PharmacyFormComponent),
+          },
+        ],
       },
     ],
   },

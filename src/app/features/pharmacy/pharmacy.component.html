@@ -51,7 +51,8 @@
           <div class="flex-1">
             <h3 class="text-lg font-semibold">{{ pharmacy.name }}</h3>
             <p class="text-gray-600 text-sm mt-1">
-              {{ pharmacy.willaya }}, {{ pharmacy.moughataa }}
+              {{ extractLabel(pharmacy.willaya, wilayaOptions) }},
+              {{ extractLabel(pharmacy.moughataa, moughataaOptions) }}
             </p>
             <div class="mt-2 text-sm">
               <span
@@ -113,9 +114,39 @@
           />
         </div>
 
-        <div class="mt-3 text-sm text-gray-500">
-          <div>Longitude: {{ pharmacy.longitude }}</div>
-          <div>Latitude: {{ pharmacy.latitude }}</div>
+        <div class="mt-3 flex justify-end">
+          <a
+            [href]="
+              'https://www.google.com/maps?q=' +
+              pharmacy.latitude +
+              ',' +
+              pharmacy.longitude
+            "
+            target="_blank"
+            class="text-gray-600 hover:text-[#47C3A4] transition-colors duration-200"
+            title="View on map"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </div>
