@@ -39,6 +39,32 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'cabinet',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/cabinets/cabinet.component').then(
+                (m) => m.CabinetComponent
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import(
+                './features/cabinets/cabinet-form/cabinet-form.component'
+              ).then((m) => m.CabinetFormComponent),
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import(
+                './features/cabinets/cabinet-form/cabinet-form.component'
+              ).then((m) => m.CabinetFormComponent),
+          },
+        ],
+      },
     ],
   },
 ];

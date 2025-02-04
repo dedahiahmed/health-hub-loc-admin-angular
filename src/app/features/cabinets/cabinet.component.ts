@@ -1,3 +1,4 @@
+// cabinet.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -6,29 +7,26 @@ import { extractLabel } from '../../core/helpers/extractLabel';
 import { wilayaOptions } from '../../core/arrays/wilayaOptions';
 import { moughataaOptions } from '../../core/arrays/moughataaOptions';
 
-interface Pharmacy {
+interface Cabinet {
   id: number;
-  name: string;
+  nom: string;
   longitude: number;
   latitude: number;
   willaya: string;
   moughataa: string;
-  img: string | null;
-  openTonight: boolean;
+  img: string;
 }
 
-export interface PageableSort {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-}
-
-export interface PageableResponse<T> {
+interface PageableResponse<T> {
   content: T[];
   pageable: {
     pageNumber: number;
     pageSize: number;
-    sort: PageableSort;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
     offset: number;
     paged: boolean;
     unpaged: boolean;
@@ -38,20 +36,24 @@ export interface PageableResponse<T> {
   last: boolean;
   size: number;
   number: number;
-  sort: PageableSort;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
   numberOfElements: number;
   first: boolean;
   empty: boolean;
 }
 
 @Component({
-  selector: 'app-pharmacy',
+  selector: 'app-cabinet',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './pharmacy.component.html',
+  templateUrl: './cabinet.component.html',
 })
-export class PharmacyComponent implements OnInit {
-  pharmacies: Pharmacy[] = [];
+export class CabinetComponent implements OnInit {
+  cabinets: Cabinet[] = [];
   isLoading = true;
   error: string | null = null;
   currentPage = 0;
@@ -61,25 +63,27 @@ export class PharmacyComponent implements OnInit {
   protected readonly extractLabel = extractLabel;
   protected readonly wilayaOptions = wilayaOptions;
   protected readonly moughataaOptions = moughataaOptions;
+
   constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit() {
-    this.loadPharmacies();
+    this.loadCabinets();
   }
 
-  loadPharmacies() {
+  loadCabinets() {
     this.isLoading = true;
     this.error = null;
 
     this.apiService
-      .get<PageableResponse<Pharmacy>>(
-        `/api/pharmacies?page=${this.currentPage}&size=${this.itemsPerPage}`
+      .get<PageableResponse<Cabinet>>(
+        `/api/cabinets?page=${this.currentPage}&size=${this.itemsPerPage}`
       )
       .subscribe({
         next: (response) => {
-          console.log('Backend Response:', response);
-
-          this.pharmacies = response.content;
+          this.cabinets = response.content.map((cabinet) => ({
+            ...cabinet,
+            img: 'https://firebasestorage.googleapis.com/v0/b/health-hub-loc-828d4.appspot.com/o/pharmacy-sign-uk-D9C3RR.jpg?alt=media&token=1ff94864-b3a3-48ef-9b43-0e2e74c14834',
+          }));
           this.totalPages = response.totalPages;
           this.currentPage = response.number;
           this.itemsPerPage = response.size;
@@ -87,36 +91,35 @@ export class PharmacyComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error fetching pharmacies:', error);
-          this.error = 'Failed to load pharmacies. Please try again later.';
+          console.error('Error fetching cabinets:', error);
+          this.error = 'Failed to load cabinets. Please try again later.';
           this.isLoading = false;
         },
       });
   }
 
-  navigateToNewPharmacy() {
-    this.router.navigate(['/pharmacy/new']);
+  navigateToNewCabinet() {
+    this.router.navigate(['/cabinet/new']);
   }
 
-  editPharmacy(id: number) {
-    this.router.navigate(['/pharmacy/edit', id]);
+  editCabinet(id: number) {
+    this.router.navigate(['/cabinet/edit', id]);
   }
 
-  deletePharmacy(id: number) {
-    if (confirm('Are you sure you want to delete this pharmacy?')) {
-      this.apiService.delete(`/api/pharmacies/${id}`).subscribe({
+  deleteCabinet(id: number) {
+    if (confirm('Are you sure you want to delete this cabinet?')) {
+      this.apiService.delete(`/api/cabinets/${id}`).subscribe({
         next: () => {
-          this.pharmacies = this.pharmacies.filter((p) => p.id !== id);
-          // If we deleted the last item on the page, go to previous page
-          if (this.pharmacies.length === 0 && this.currentPage > 0) {
+          this.cabinets = this.cabinets.filter((c) => c.id !== id);
+          if (this.cabinets.length === 0 && this.currentPage > 0) {
             this.changePage(this.currentPage - 1);
           } else {
-            this.loadPharmacies();
+            this.loadCabinets();
           }
         },
         error: (error) => {
-          console.error('Error deleting pharmacy:', error);
-          alert('Failed to delete pharmacy. Please try again.');
+          console.error('Error deleting cabinet:', error);
+          alert('Failed to delete cabinet. Please try again.');
         },
       });
     }
@@ -125,7 +128,7 @@ export class PharmacyComponent implements OnInit {
   changePage(page: number) {
     if (page >= 0 && page < this.totalPages) {
       this.currentPage = page;
-      this.loadPharmacies();
+      this.loadCabinets();
       window.scrollTo(0, 0);
     }
   }
