@@ -1,0 +1,144 @@
+<!-- doctor-form.component.html -->
+<div
+  class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12"
+>
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+      class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10"
+    >
+      <div class="max-w-md mx-auto">
+        <!-- Header -->
+        <div class="flex items-center space-x-5">
+          <div
+            class="h-14 w-14 bg-blue-500 rounded-full flex flex-shrink-0 justify-center items-center text-white text-2xl font-mono"
+          >
+            D
+          </div>
+          <div
+            class="block pl-2 font-semibold text-xl self-start text-gray-700"
+          >
+            <h2 class="leading-relaxed">
+              {{ isEditMode ? "Edit" : "Create" }} Doctor
+            </h2>
+          </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div
+          *ngIf="isLoading"
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50"
+        >
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"
+          ></div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="mt-4 p-4 bg-red-50 text-red-500 rounded-md">
+          {{ error }}
+        </div>
+
+        <!-- Form -->
+        <form
+          [formGroup]="doctorForm"
+          (ngSubmit)="onSubmit()"
+          class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7"
+        >
+          <!-- Name -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Name</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              placeholder="Doctor name"
+              [class.border-red-500]="getFieldError('name')"
+            />
+            <span
+              *ngIf="getFieldError('name')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("name") }}
+            </span>
+          </div>
+
+          <!-- Speciality -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Speciality</label>
+            <select
+              formControlName="speciality"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              [class.border-red-500]="getFieldError('speciality')"
+            >
+              <option value="" disabled>Select Speciality</option>
+              <option *ngFor="let spec of specialities" [value]="spec">
+                {{ spec }}
+              </option>
+            </select>
+            <span
+              *ngIf="getFieldError('speciality')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("speciality") }}
+            </span>
+          </div>
+
+          <!-- Cabinet -->
+          <div class="flex flex-col">
+            <label class="leading-loose">Cabinet</label>
+            <select
+              formControlName="cabinetId"
+              class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+              [class.border-red-500]="getFieldError('cabinetId')"
+            >
+              <option value="" disabled>Select Cabinet</option>
+              <option *ngFor="let cabinet of cabinets" [value]="cabinet.id">
+                {{ cabinet.nom }}
+              </option>
+            </select>
+            <span
+              *ngIf="getFieldError('cabinetId')"
+              class="text-sm text-red-500 mt-1"
+            >
+              {{ getFieldError("cabinetId") }}
+            </span>
+          </div>
+
+          <!-- Schedule -->
+          <div class="space-y-4">
+            <h3 class="font-medium">Schedule</h3>
+            <div formGroupName="schedule" class="space-y-3">
+              <div *ngFor="let day of weekDays" class="flex flex-col">
+                <label class="text-sm">{{ day }}</label>
+                <input
+                  [formControlName]="day"
+                  type="text"
+                  class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                  placeholder="e.g., 9:00 AM - 5:00 PM"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit and Cancel Buttons -->
+          <div class="pt-4 flex items-center space-x-4">
+            <button
+              type="button"
+              (click)="router.navigate(['/doctor'])"
+              class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none border border-gray-400 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isLoading || !doctorForm.valid"
+              class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
+            >
+              {{ isEditMode ? "Update" : "Create" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { ApiService } from '../../core/services/api.service';
 import { extractLabel } from '../../core/helpers/extractLabel';
 import { wilayaOptions } from '../../core/arrays/wilayaOptions';
 import { moughataaOptions } from '../../core/arrays/moughataaOptions';
+import { ToastrService } from 'ngx-toastr';
 
 interface Pharmacy {
   id: number;
@@ -61,7 +62,12 @@ export class PharmacyComponent implements OnInit {
   protected readonly extractLabel = extractLabel;
   protected readonly wilayaOptions = wilayaOptions;
   protected readonly moughataaOptions = moughataaOptions;
-  constructor(private apiService: ApiService, private router: Router) {}
+
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.loadPharmacies();
@@ -77,8 +83,6 @@ export class PharmacyComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Backend Response:', response);
-
           this.pharmacies = response.content;
           this.totalPages = response.totalPages;
           this.currentPage = response.number;
@@ -88,6 +92,9 @@ export class PharmacyComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error fetching pharmacies:', error);
+          this.toastr.error(
+            'Failed to load pharmacies. Please try again later.'
+          );
           this.error = 'Failed to load pharmacies. Please try again later.';
           this.isLoading = false;
         },
@@ -103,11 +110,18 @@ export class PharmacyComponent implements OnInit {
   }
 
   deletePharmacy(id: number) {
-    if (confirm('Are you sure you want to delete this pharmacy?')) {
+    const pharmacy = this.pharmacies.find((p) => p.id === id);
+    if (!pharmacy) return;
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete pharmacy "${pharmacy.name}"?`
+      )
+    ) {
       this.apiService.delete(`/api/pharmacies/${id}`).subscribe({
         next: () => {
+          this.toastr.success('Pharmacy deleted successfully');
           this.pharmacies = this.pharmacies.filter((p) => p.id !== id);
-          // If we deleted the last item on the page, go to previous page
           if (this.pharmacies.length === 0 && this.currentPage > 0) {
             this.changePage(this.currentPage - 1);
           } else {
@@ -116,7 +130,11 @@ export class PharmacyComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error deleting pharmacy:', error);
-          alert('Failed to delete pharmacy. Please try again.');
+          this.toastr.error(
+            error.error?.message ||
+              'Failed to delete pharmacy. Please try again.',
+            'Error'
+          );
         },
       });
     }

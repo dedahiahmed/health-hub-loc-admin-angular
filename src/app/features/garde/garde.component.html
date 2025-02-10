@@ -1,0 +1,85 @@
+<!-- garde.component.html -->
+<div class="container mx-auto p-4">
+  <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <!-- Header -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800">
+        Manage Pharmacy Guards
+      </h2>
+      <p class="text-gray-600 mt-1">
+        Select pharmacies to update their open status
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
+      ></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="bg-red-50 text-red-500 p-4 rounded-md mb-4">
+      {{ error }}
+    </div>
+
+    <!-- Form Content -->
+    <div *ngIf="!isLoading && !error">
+      <!-- Open Status Toggle -->
+      <div class="mb-6">
+        <label class="flex items-center space-x-3 text-gray-700">
+          <input
+            type="checkbox"
+            [(ngModel)]="openTonight"
+            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+          />
+          <span>Set as Open Tonight</span>
+        </label>
+      </div>
+
+      <!-- Select All -->
+      <div class="mb-4 pb-4 border-b border-gray-200">
+        <label class="flex items-center space-x-3 text-gray-700 font-medium">
+          <input
+            type="checkbox"
+            [(ngModel)]="selectAll"
+            (change)="toggleSelectAll()"
+            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+          />
+          <span>Select All Pharmacies</span>
+        </label>
+      </div>
+
+      <!-- Pharmacies List -->
+      <div class="max-h-96 overflow-y-auto">
+        <div class="space-y-3">
+          <div
+            *ngFor="let pharmacy of pharmacies"
+            class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-150"
+          >
+            <label class="flex items-center flex-1 cursor-pointer">
+              <input
+                type="checkbox"
+                [(ngModel)]="pharmacy.isSelected"
+                (change)="updateSelectAllState()"
+                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+              />
+              <span class="ml-3 text-gray-700">{{ pharmacy.name }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <button
+          (click)="updateSelectedStatus()"
+          [disabled]="isLoading"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          Update Open Status
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

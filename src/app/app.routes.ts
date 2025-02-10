@@ -37,6 +37,13 @@ export const routes: Routes = [
                 './features/pharmacy/pharmacy-form/pharmacy-form.component'
               ).then((m) => m.PharmacyFormComponent),
           },
+          {
+            path: 'garde',
+            loadComponent: () =>
+              import('./features/garde/garde.component').then(
+                (m) => m.GardeComponent
+              ),
+          },
         ],
       },
       {
@@ -62,6 +69,32 @@ export const routes: Routes = [
               import(
                 './features/cabinets/cabinet-form/cabinet-form.component'
               ).then((m) => m.CabinetFormComponent),
+          },
+        ],
+      },
+      {
+        path: 'doctor',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/doctors/doctor.component').then(
+                (m) => m.DoctorComponent
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import(
+                './features/doctors/doctor-form/doctor-form.component'
+              ).then((m) => m.DoctorFormComponent),
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import(
+                './features/doctors/doctor-form/doctor-form.component'
+              ).then((m) => m.DoctorFormComponent),
           },
         ],
       },

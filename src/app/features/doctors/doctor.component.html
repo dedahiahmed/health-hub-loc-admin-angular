@@ -1,0 +1,197 @@
+<!-- doctor.component.html -->
+<div class="container mx-auto p-4">
+  <div class="content p-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-2xl font-semibold">Doctors</h2>
+      <button
+        (click)="navigateToNewDoctor()"
+        class="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        <svg
+          class="h-5 w-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
+        </svg>
+        Add Doctor
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
+      ></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="text-red-500 text-center py-4">{{ error }}</div>
+
+    <!-- Doctor Grid -->
+    <div
+      *ngIf="!isLoading && !error"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+    >
+      <div
+        *ngFor="let doctor of doctors"
+        class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200"
+      >
+        <!-- Doctor Header -->
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold">{{ doctor.name }}</h3>
+            <p class="text-gray-600 text-sm mt-1">{{ doctor.speciality }}</p>
+            <p class="text-gray-600 text-sm">
+              Cabinet: {{ doctor.cabinetName }}
+            </p>
+          </div>
+          <!-- Action Buttons -->
+          <div class="flex space-x-2">
+            <button
+              (click)="editDoctor(doctor.id)"
+              class="text-blue-500 hover:text-blue-700"
+              title="Edit"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </button>
+            <button
+              (click)="deleteDoctor(doctor.id)"
+              class="text-red-500 hover:text-red-700"
+              title="Delete"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Schedule Display -->
+        <!-- Replace the Schedule Display section in doctor.component.html -->
+
+        <!-- Schedule Display -->
+        <div class="mt-4 bg-gray-50 rounded-lg p-4">
+          <div class="flex items-center mb-3">
+            <svg
+              class="h-5 w-5 text-blue-500 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <h4 class="font-medium text-gray-700">Working Hours</h4>
+          </div>
+
+          <div class="space-y-2">
+            <div
+              *ngFor="let day of getDays(doctor.schedule)"
+              class="flex items-center py-1 border-b border-gray-200 last:border-0"
+            >
+              <div class="w-24 font-medium text-gray-600">{{ day }}</div>
+              <div class="flex-1">
+                <span
+                  *ngIf="doctor.schedule[day]"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  {{ doctor.schedule[day] || "Not Available" }}
+                </span>
+                <span
+                  *ngIf="!doctor.schedule[day]"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  N/A
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      *ngIf="!isLoading && !error && totalPages > 1"
+      class="fixed bottom-5 right-5 z-50 flex items-center space-x-2 bg-white rounded-md shadow-md p-2"
+    >
+      <button
+        [disabled]="currentPage === 0"
+        (click)="changePage(currentPage - 1)"
+        class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Previous
+      </button>
+      <span class="text-sm text-gray-600"
+        >Page {{ currentPage + 1 }} of {{ totalPages }}</span
+      >
+      <button
+        [disabled]="currentPage === totalPages - 1"
+        (click)="changePage(currentPage + 1)"
+        class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

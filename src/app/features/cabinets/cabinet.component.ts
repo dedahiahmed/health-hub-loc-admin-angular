@@ -1,4 +1,3 @@
-// cabinet.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -6,6 +5,7 @@ import { ApiService } from '../../core/services/api.service';
 import { extractLabel } from '../../core/helpers/extractLabel';
 import { wilayaOptions } from '../../core/arrays/wilayaOptions';
 import { moughataaOptions } from '../../core/arrays/moughataaOptions';
+import { ToastrService } from 'ngx-toastr';
 
 interface Cabinet {
   id: number;
@@ -64,7 +64,11 @@ export class CabinetComponent implements OnInit {
   protected readonly wilayaOptions = wilayaOptions;
   protected readonly moughataaOptions = moughataaOptions;
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.loadCabinets();
@@ -92,6 +96,7 @@ export class CabinetComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error fetching cabinets:', error);
+          this.toastr.error('Failed to load cabinets. Please try again later.');
           this.error = 'Failed to load cabinets. Please try again later.';
           this.isLoading = false;
         },
@@ -107,9 +112,18 @@ export class CabinetComponent implements OnInit {
   }
 
   deleteCabinet(id: number) {
-    if (confirm('Are you sure you want to delete this cabinet?')) {
+    // Custom confirm dialog with toastr
+    const cabinet = this.cabinets.find((c) => c.id === id);
+    if (!cabinet) return;
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete cabinet "${cabinet.nom}"?`
+      )
+    ) {
       this.apiService.delete(`/api/cabinets/${id}`).subscribe({
         next: () => {
+          this.toastr.success('Cabinet deleted successfully');
           this.cabinets = this.cabinets.filter((c) => c.id !== id);
           if (this.cabinets.length === 0 && this.currentPage > 0) {
             this.changePage(this.currentPage - 1);
@@ -119,7 +133,11 @@ export class CabinetComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error deleting cabinet:', error);
-          alert('Failed to delete cabinet. Please try again.');
+          this.toastr.error(
+            error.error?.message ||
+              'Failed to delete cabinet. Please try again.',
+            'Error'
+          );
         },
       });
     }
