@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  health-loca-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "20102:20102"
+    restart: always
