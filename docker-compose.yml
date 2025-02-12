@@ -8,3 +8,9 @@ services:
     ports:
       - "20102:20102"
     restart: always
+    networks:
+      - health-loca-admin
+
+networks:
+  health-loca-admin:
+    driver: bridge
